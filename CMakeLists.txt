@@ -6,6 +6,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -20,43 +22,8 @@ set(PROJECT_SOURCES
 
 )
 
-set(INCLUDE_FILES
-    codeeditor/QHighlightRule.hpp
-    codeeditor/QHighlightBlockRule.hpp
-    codeeditor/QCodeEditor.hpp
-    codeeditor/QCXXHighlighter.hpp
-    codeeditor/QLineNumberArea.hpp
-    codeeditor/QStyleSyntaxHighlighter.hpp
-    codeeditor/QSyntaxStyle.hpp
-    codeeditor/QGLSLCompleter.hpp
-    codeeditor/QGLSLHighlighter.hpp
-    codeeditor/QLanguage.hpp
-    codeeditor/QXMLHighlighter.hpp
-    codeeditor/QJSONHighlighter.hpp
-    codeeditor/QLuaCompleter.hpp
-    codeeditor/QLuaHighlighter.hpp
-    codeeditor/QPythonCompleter.hpp
-    codeeditor/QPythonHighlighter.hpp
-    codeeditor/QFramedTextAttribute.hpp
-)
+add_subdirectory(codeeditor)
 
-set(SOURCE_FILES
-    codeeditor/QCodeEditor.cpp
-    codeeditor/QLineNumberArea.cpp
-    codeeditor/QCXXHighlighter.cpp
-    codeeditor/QSyntaxStyle.cpp
-    codeeditor/QStyleSyntaxHighlighter.cpp
-    codeeditor/QGLSLCompleter.cpp
-    codeeditor/QGLSLHighlighter.cpp
-    codeeditor/QLanguage.cpp
-    codeeditor/QXMLHighlighter.cpp
-    codeeditor/QJSONHighlighter.cpp
-    codeeditor/QLuaCompleter.cpp
-    codeeditor/QLuaHighlighter.cpp
-    codeeditor/QPythonCompleter.cpp
-    codeeditor/QPythonHighlighter.cpp
-    codeeditor/QFramedTextAttribute.cpp
-)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(untitled1
@@ -66,11 +33,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         filetreeview.h filetreeview.cpp
         filecreatedialog.h filecreatedialog.cpp
         filetab.h filetab.cpp
-        codeeditor.h codeeditor.cpp
+
         resources.qrc
         style.qss
         style.qss
         iconprovider.h iconprovider.cpp
+        codeeditor/CMakeLists.txt
     )
     target_include_directories(untitled1 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 # Define target properties for Android with Qt 6 as:
@@ -90,6 +58,8 @@ else()
         )
     endif()
 endif()
+
+target_link_libraries(untitled1 PRIVATE codeeditor)
 
 target_link_libraries(untitled1 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
@@ -117,3 +87,4 @@ install(TARGETS untitled1
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(untitled1)
 endif()
+

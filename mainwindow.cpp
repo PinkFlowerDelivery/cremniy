@@ -87,9 +87,10 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
     auto *model = static_cast<QFileSystemModel*>(ui->treeView->model());
     if (model->isDir(index)) return;
     QString fileName = model->fileName(index);
+    QString filePath = model->filePath(index);
 
     QWidget *emptyWidget = new QWidget();
-    FileTab *filetabWidget = new FileTab(emptyWidget);
+    FileTab *filetabWidget = new FileTab(emptyWidget, filePath);
     QVBoxLayout *vlayout = new QVBoxLayout(emptyWidget);
     filetabWidget->setObjectName("filetab");
     vlayout->addWidget(filetabWidget);
