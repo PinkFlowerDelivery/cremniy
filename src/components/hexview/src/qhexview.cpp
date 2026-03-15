@@ -1,6 +1,8 @@
 #include <QApplication>
 #include <QClipboard>
+#include <QContextMenuEvent>
 #include <QFontDatabase>
+#include <QMenu>
 #include <QHexView/model/buffer/qmemorybuffer.h>
 #include <QHexView/model/qhexcursor.h>
 #include <QHexView/model/qhexutils.h>
@@ -1753,6 +1755,47 @@ void QHexView::mouseMoveEvent(QMouseEvent* e) {
         if(area == QHexArea::Ascii || area == QHexArea::Hex)
             m_currentarea = area;
         this->hexCursor()->select(pos);
+    }
+}
+
+void QHexView::contextMenuEvent(QContextMenuEvent* e) {
+    if(!m_hexdocument) {
+        e->ignore();
+        return;
+    }
+
+    QPoint vpos = this->viewport()->mapFrom(this, e->pos());
+    auto pos = this->positionFromPoint(vpos);
+    auto area = this->areaFromPoint(vpos);
+
+    if(pos.isValid() && (area == QHexArea::Hex || area == QHexArea::Ascii)) {
+        m_currentarea = area;
+        if(!m_hexcursor->isSelected(pos.line, pos.column)) {
+            m_hexcursor->move(pos);
+            m_hexcursor->selectSize(1);
+        }
+        this->viewport()->update();
+    }
+
+    QMenu menu(this);
+    QAction* actionSelectAll = menu.addAction(tr("Select All"));
+    QAction* actionCopy = menu.addAction(tr("Copy"));
+    QAction* actionPaste = menu.addAction(tr("Paste"));
+
+    actionSelectAll->setEnabled(m_hexdocument->length() > 0);
+    actionPaste->setEnabled(!m_readonly);
+
+    QAction* chosen = menu.exec(e->globalPos());
+    if(!chosen)
+        return;
+
+    if(chosen == actionSelectAll) {
+        this->selectAll();
+    } else if(chosen == actionCopy) {
+        this->copy(m_currentarea != QHexArea::Ascii);
+    } else if(chosen == actionPaste) {
+        if(!m_readonly)
+            this->paste(m_currentarea != QHexArea::Ascii);
     }
 }
 
