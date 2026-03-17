@@ -19,7 +19,7 @@
         pname = "cremniy";
         version = "1.0";
 
-        src = ./src;
+        src = src;
 
         buildInputs = with pkgs; [ qt6.qtbase ];
         nativeBuildInputs = with pkgs; [
