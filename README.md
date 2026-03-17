@@ -33,10 +33,10 @@ It combines tools for working with binary files, memory, and system code in a si
 
 - Code editor
 - HEX editor
+- Disassembler
 
 ### Planned
 
-- Disassembler
 - Debugger
 - Memory visualization
 
