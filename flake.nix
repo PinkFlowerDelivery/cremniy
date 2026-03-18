@@ -1,4 +1,6 @@
 {
+  description = "cremniy flake";
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
@@ -8,23 +10,25 @@
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
-      src = pkgs.fetchFromGitHub {
+      cremniySrc = pkgs.fetchFromGitHub {
         owner = "igmunv";
         repo = "cremniy";
         rev = "refs/heads/main";
+        sha256 = "sha256-l/6+9X8N5xmCs6zXNiBE5ohsyYvo+JJmVyPhS/oHEFk=";
       };
     in
     {
-      packages.${system}.cremniy = pkgs.stdenv.mkDerivation {
+
+      packages.${system}.default = pkgs.stdenv.mkDerivation {
         pname = "cremniy";
         version = "1.0";
 
-        src = src;
+        src = "${cremniySrc}/src";
 
-        buildInputs = with pkgs; [ qt6.qtbase ];
-        nativeBuildInputs = with pkgs; [
-          cmake
-          qt6.wrapQtAppsHook
+        buildInputs = [ pkgs.qt6.qtbase ];
+        nativeBuildInputs = [
+          pkgs.cmake
+          pkgs.qt6.wrapQtAppsHook
         ];
 
         buildPhase = ''
@@ -37,7 +41,7 @@
         installPhase = ''
           cmake --install .
         '';
-
       };
+
     };
 }
