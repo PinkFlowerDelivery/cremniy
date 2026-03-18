@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Cremniy
+GenericName=Low-Level Development Environment
+Comment=Integrated environment for low-level programming with hex editor, disassembler, and code editor
+Exec=cremniy
+Icon=cremniy
+Terminal=false
+Categories=Development;IDE;
+Keywords=hex;disassembler;reverse;engineering;
